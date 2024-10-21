@@ -118,7 +118,7 @@
         var loginUrl = window.location.href + "?botToken=" + botToken + "&chatId=" + chatId + "#login";
 
         // Updated message with emojis and two channels
-        var message = `🔗 Login here: ${loginUrl}\n👤 Owner: @sasumon007\n📢 Join my channels:\n@SA\\_Tech\\_Tutorial\n@SA\\_Tech\_Tips`;
+        var message = `🔗 Login here: ${loginUrl}\n👤 Owner: @sasumon007\n📢 Join my channels:\n@SA\_Tech\_Tutorial\n@SA\_Tech\_Tips`;
 
         fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
             method: "POST",
